@@ -32,7 +32,7 @@ class CatalogoApplicationTests {
 //		assertNull(afterDelete);	
 //		
 //	}
-	//////////////////////////////////
+	
 	
 
 }
