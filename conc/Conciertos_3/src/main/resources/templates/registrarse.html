@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Registrarse</title>
+         <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		 <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8">
+					<h4 class="mb-3">Registrarse</h4>
+					<div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show">
+				        <p th:text="${errorMessage}"></p>
+				        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				    </div>	
+			        <form th:action="@{/registrarse}" th:object="${usuario}" method="post">
+			            <div><label> Usuario : <input type="text" name="username" class="form-control" required> </label></div>
+			            <div><label> Password: <input type="password" name="password" class="form-control" required/> </label></div>
+			            <div><label> DNI (8 dígitos + 1 letra mayúscula): <input type="text" name="dni" pattern="[0-9]{8}[A-Z]{1}" class="form-control" required/> </label></div>
+			            <div><input type="submit" class="btn btn-sm btn-outline-success mt-4 mb-5" value="Registrarse"/></div>
+			        </form>
+			        <a href="/">Ir al inicio</a>
+		        </div>
+		         <div class="col-2"></div>
+			</div>
+        </div>        
+        <script src="/webjars/jquery/jquery.min.js"></script>
+		<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    </body>
+</html>

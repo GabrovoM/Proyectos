@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Ventas de entradas</h1>
+	</div>
+		<div class="row mb-4">
+			<div class="col-9"></div>
+			<div class="col-3">
+				<p style="text-align: right;">Usuario: <strong><span th:text="${username}" class="me-4"></span></strong><a th:href="@{/logout}">Logout</a></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<!-- lista de ventas -->
+
+		   <div class="input-group mb-3" id="fechas">
+			  <p class="mb-2"><strong>Consulta de ventas por grupo y entre fechas</strong></p>
+			     <form th:action="@{/ventas/fechas/submit}" action="#" method="post" class="formgrupofechas" style="margin:auto" onsubmit="return validar()">
+					  <div class="row">
+				        <div class="col-md-2 text-md-end"> 
+				            <label for="grupos" class="col-form-label">Grupo</label>
+				        </div>
+				        <div class="col-md-10">
+				            <select id="grupos" name="grupos" class="form-select mb-3">
+				                <option th:each="grupo: ${listaGrupos}"
+				                        th:value="${grupo.idgrupo}"
+				                        th:text="${grupo.nombre}">
+				                </option>
+				            </select>
+				        </div>
+				    </div>
+					<div class="row">
+						
+						<div class="col-12">
+							 <label for="f_ini" class="ms-5">Fecha inicio: </label>
+							 <input id="f_ini" name="fechaInicioStr" type="date" required>
+							
+							 <label for="f_fin" class="ms-1">Fecha fin: </label>
+							 <input id="f_fin" name="fechaFinStr" type="date" required>			 
+							 
+							 <button type="submit" class="btn btn-success btn-sm ms-1" >Buscar</button>
+							 </div>
+							 
+					</div>                            
+				 </form>
+				  <p class="mb-2 mt-3"><strong>Consulta de ventas por DNI del comprador</strong></p>
+			     <form th:action="@{/ventas/dni/submit}" action="#" method="post" class="formgrupofechas">
+					  <div class="row">
+				        <div class="col-md-6 text-md-end"> 
+				            <label for="dni" class="col-form-label">DNI del comprador: </label>		           
+				        </div>
+				        <div class="col-md-6">
+				            <input id="dni" name="dni" type="text" required>
+				            <button type="submit" class="btn btn-success btn-sm ms-1">Buscar</button>
+				        </div>
+				    </div>			                       
+				 </form>
+		     </div>	
+     
+      		<p class="mb-2 mt-3 text-center"><strong>Para consultar las ventas por concierto pulse sobre la fecha</strong></p>
+	
+	
+	
+	<div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show">
+        <p th:text="${errorMessage}"></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>	
+			    
+			    
+			    
+			    			
+				<table class="table table-hover">
+				    <thead class="table-dark bg-info text-white  ">
+				        <tr>
+				            <th scope="col"> Id </th>
+				            <th scope="col"> Fecha venta</th>
+				            <th scope="col"> Fecha concierto </th>
+				            <th scope="col"> Número entradas </th>
+				            <th scope="col"> Grupo </th>
+  							<th scope="col"> Editar </th>
+            				<th scope="col"> Borrar </th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<tr th:if="${listadoVentas.empty}">
+				            <td colspan="6"> No hay ventas</td>
+				        </tr>
+				        <tr th:each="venta : ${listadoVentas}">				        
+					        <td>
+					        	<a class="btn btn-success btn-sm" th:href="@{/ventas/{id}(id=${venta.idventa})}">
+					        		<span th:text="${venta.idventa}">Id</span>
+					        	</a>
+					        </td> 				         
+				         	<td>
+								 <span th:text="${#temporals.format(venta.fecha, 'yyyy-MM-dd')}"></span>
+				            </td>
+				            <td>
+								<a th:href="@{/ventas/concierto/{id}(id=${venta.concierto.idconcierto})}">
+				            		<span th:text="${venta.concierto.fecha}"></span>
+				            	</a>
+				            </td>
+				             <td style="text-align:center">
+				            		<span th:text="${venta.numeroentradas}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${venta.concierto.grupo.nombre}"></span>
+				            </td>
+							<td style="text-align:center">
+							        <a class="btn btn-success btn-sm" th:href="@{/ventas/editVenta/{id}(id=${venta.idventa})}">*</a>
+				
+							</td>
+						     <td style="text-align:center">
+    								<button class="btn btn-warning btn-sm text-white pointer" style="cursor:pointer" th:onclick= "'confirmDelete('+${venta.idventa}+')'">x</button>
+						    </td>
+								        				            
+				        </tr>
+				    </tbody>
+				</table>
+					<div class="col-2 float-right">
+			        <div class="p-5">
+						<button type="button" class="btn btn-success float-right" >
+							<a href="/ventas/entradas" style="color:white; text-decoration:none">+</a>
+						</button>			
+			        </div>       
+			    </div> 
+
+			</div>
+			<div class="col-sm-4">
+				<nav>
+					<ul>
+						<li><a href="/admin">Inicio</a></li>
+						<li><a href="/conciertos">Conciertos</a></li>
+						<li><a href="/grupos">Grupos</a></li>
+						<li><a href="/ventas">Ventas</a></li>
+						<li><a href="/sala">Salas</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script>
+	    function validar() {
+	        var fecha_ini = new Date(document.getElementById("f_ini").value);
+	        var fecha_fin = new Date(document.getElementById("f_fin").value);
+	        if (fecha_ini > fecha_fin) {
+	            alert("La fecha de inicio debe ser anterior a la fecha de fin.");
+	            document.getElementById("f_ini").value="";
+	            document.getElementById("f_fin").value="";
+	            return false; 
+	        }
+	        return true; 
+	    }
+	    
+	     function confirmDelete(id) {
+			console.log(id);
+	        var confirmResult = confirm("Borrar esta venta?");
+	        if (confirmResult) {
+	            window.location.href = '/ventas/delete/' + id;
+	        }
+	    }
+	</script>
+</body>
+</html>

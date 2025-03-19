@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Editar Grupo</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>  
+	<div class="container">	
+		<div class="m-5">
+			<nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item">
+			    	<a href="/">Inicio</a>
+		        </li>
+			    <li class="breadcrumb-item"><a href="/grupos">Grupos</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">Añadir grupo</li>
+			  </ol>
+			</nav>
+		</div>
+	   
+		 <div class="row">
+			 <div class="col-2"></div>
+			 <div class="col-7">
+			  <form action="#" th:action="@{/grupos/addGrupo/submit}" th:object="${nuevoGrupo}" method="post">
+		        <div class="modal-body">			        
+				  <div class="form-row">
+				    <div class="form-group  mt-4">
+					  <input type="hidden" th:field="*{idgrupo}" class="form-control" id="id"/>
+				      <label for="nombre">Nombre</label>
+				      <input type="text" th:field="*{nombre}" class="form-control" id="nombre"  placeholder="Nombre" required/>
+				      <label for="vegano">Descripción</label>
+				      <input type="text" th:field="*{descripcion}" class="form-control" id="descripcion" required/>  
+				      <div class="row mt-3">
+						  <div class="col-8">
+					      <label for="vegano">Fecha creación</label>
+					      </div>
+					      <div class="col-4">
+					      <input type="date" th:field="*{fechacreacion}" class="form-control" id="fechacreacion" required/> 
+					      </div>
+				      </div>
+				     </div>
+	              </div>					   
+		        </div>			        
+		        <div class="modal-footer">
+	                <input type="submit" value="Guardar" class="btn btn-success float-right mt-5">
+	                <a href="/grupos" class="btn btn-outline-warning float-right mt-5 ms-1">Volver a la lista</a>
+		        </div>
+	        </form>	
+	        </div>
+	        <div class="col-3"></div>
+		  </div>
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	</body>
+	</html>

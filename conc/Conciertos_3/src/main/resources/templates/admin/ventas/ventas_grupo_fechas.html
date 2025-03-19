@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Ventas de entradas para el grupo <span th:text="${grupo.nombre}"></span>  entre fechas <span th:text="${fini}"></span> y <span th:text="${ffin}"></span></h1>
+	</div>		
+		<div class="row">
+			<div class="col-sm-8">
+				<!-- lista de ventas -->
+				
+				<table class="table table-hover">
+				    <thead class="table-dark bg-info text-white  ">
+				        <tr>
+				            <th scope="col"> Id </th>
+				            <th scope="col"> Fecha venta</th>
+				            <th scope="col"> Hora venta</th>
+				            <th scope="col"> Fecha concierto </th>
+				            <th scope="col"> Número entradas </th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<tr th:if="${listaFechas.empty}">
+				            <td colspan="6"> No hay ventas</td>
+				        </tr>
+				        <tr th:each="venta : ${listaFechas}">
+				        
+					        <td>
+					        	<a class="btn btn-success btn-sm" th:href="@{/ventas/{id}(id=${venta.idventa})}">
+					        		<span th:text="${venta.idventa}">Id</span>
+					        	</a>
+					        </td>  
+				         	<td>
+								  <span th:text="${#temporals.format(venta.fecha, 'yyyy-MM-dd')}"></span>
+				            </td>				            
+				            <td>
+								<span th:if="${venta.hora != null}" th:text="${#temporals.format(venta.hora.toLocalTime(), 'HH:mm:ss')}"></span>
+								<span th:if="${venta.hora == null}">--</span>
+				            </td>
+				            <td>
+				            	<span th:text="${venta.concierto.fecha}"></span>
+				            </td>
+				             <td>
+				            	<span th:text="${venta.numeroentradas}"></span>
+				            </td>  
+
+				        </tr>
+				    </tbody>
+				</table>
+				
+				<a href="/ventas" class="btn btn-success btn-sm">Volver al listado de ventas</a>
+
+			</div>
+			<div class="col-sm-4">
+				<nav>
+					<ul>
+						<li><a href="/admin">Inicio</a></li>
+						<li><a href="/conciertos">Conciertos</a></li>
+						<li><a href="/grupos">Grupos</a></li>
+						<li><a href="/ventas">Ventas</a></li>
+						<li><a href="/sala">Salas</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Conciertos</h1>
+	</div>
+	<div class="row mb-4">
+		<div class="col-9"></div>
+		<div class="col-3">			
+<!--			<p style="text-align: right;">Usuario: <strong><span th:text="${username}" class="me-4"></span></strong><a th:href="@{/logout}">Logout</a></p>-->
+			<p style="text-align: right;">Usuario: <strong><span th:text="${username}" class="me-4"></span></strong><a th:href="@{/index}">Logout</a></p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-2"></div>
+			<div class="col-sm-8">
+				<!-- lista de conciertos -->
+				
+				 <div class="input-group mb-3" id="fechas">
+					 <p class="mb-2"><strong>Buscar conciertos por grupo y entre fechas</strong></p>
+				     <form th:action="@{/conciertos/fechas/submit}" action="#" method="post" class="formgrupofechas" onsubmit="return validar()">						  
+						  <input type="hidden" name="rolename" th:value="${rolename}">
+						  <div class="row">
+					        <div class="col-md-2 text-md-end"> 
+					            <label for="gruposc" class="col-form-label">Grupo</label>
+					        </div>
+					        <div class="col-md-10">
+					            <select id="gruposc" name="gruposc" class="form-select mb-3" required>
+									<option value="" selected>Selecciona grupo</option>
+					                <option th:each="grupo: ${listaGrupos}"
+					                        th:value="${grupo.idgrupo}"
+					                        th:text="${grupo.nombre}">
+					                </option>
+					            </select>
+					        </div>
+					    </div>
+						<div class="row">							
+							<div class="col-12">
+								 <label for="f_inic" class="ms-5">Fecha inicio: </label>
+								 <input id="f_inic" name="fechaInicioStr" type="date" required>								
+								 <label for="f_finc" class="ms-1">Fecha fin: </label>
+								 <input id="f_finc" name="fechaFinStr" type="date" required> 								 
+								 <button type="submit" class="btn btn-success btn-sm ms-1">Buscar</button>
+							</div>								 
+						</div>                            
+					 </form>
+			     </div>	
+			     
+			     </div>
+			<div class="col-sm-2">
+			</div>
+			<div class="row">
+			     
+			<table class="table table-hover">
+				    <thead class="table-dark bg-info text-white  ">
+				        <tr>
+							<th>Id</th>
+				            <th scope="col"> Grupo </th>
+				            <th scope="col"> Fecha </th>
+				            <th scope="col"> Hora </th>
+				            <th scope="col"> Sala </th>
+				            <th scope="col"> Plazas disponibles </th>				            
+				            <th scope="col"> Precio anticipado </th>
+				            <th scope="col"> Precio taquilla </th>
+				            <th scope="col"> Comprar entradas </th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<tr th:if="${listaConciertos.empty}">
+				            <td colspan="6"> No hay conciertos</td>
+				        </tr>
+				        <tr th:each="concierto : ${listaConciertos}">				        
+					        <td>					        	
+					        		<span th:text="${concierto.idconcierto}">Id</span>					        	
+					        </td>     				         
+				         	<td>
+				            		<span th:text="${concierto.grupo.nombre}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${concierto.fecha}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${concierto.hora}"></span>
+				            </td>
+				             <td>
+				            		<span th:text="${concierto.sala.nombre}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${concierto.plazasdisponibles}"></span>
+				            </td>				           
+				            <td>
+				            		<span th:text="${concierto.precioanticipado}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${concierto.preciotaquilla}"></span>
+				            </td>    
+							 <td> 
+							 	<span th:if="${concierto.plazasdisponibles == 0}"><mark>No hay plazas</mark></span>
+							    <a th:if="${concierto.plazasdisponibles != 0}"
+							       th:href="@{/ventas/comprarEntradasConcierto/{id}(id=${concierto.idconcierto})}">Comprar</a>
+							 </td>				            
+				        </tr>
+				    </tbody>
+				</table>			
+			
+				<div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show">
+			        <p th:text="${errorMessage}"></p>
+			        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			    </div>
+				
+			</div>
+		</div>		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script th:inline="javascript">	
+	     function validar() {
+	        var fecha_ini = new Date(document.getElementById("f_inic").value);
+	        var fecha_fin = new Date(document.getElementById("f_finc").value);
+	        if (fecha_ini > fecha_fin) {
+	            alert("La fecha de inicio debe ser anterior a la fecha de fin.");
+	            document.getElementById("f_inic").value="";
+	            document.getElementById("f_finc").value="";
+	            return false; 
+	        }
+	        return true; 
+	    }   	    
+	</script>
+</body>
+</html>

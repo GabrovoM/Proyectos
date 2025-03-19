@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Venta de entradas</h1>
+	</div>	
+		<div class="row">
+
+				<div class="card border border-success p-5" >
+				<h5>Seleccionar entradas</h5>
+				<form th:action="@{/ventas/entradascompra/submit}" method="post" th:object="${nuevaVenta}" id="form_venta">
+					<input type="hidden" id="idcon" name="idcon" th:value="${idcon}">					
+					<input type="hidden" id="grupo" name="grupo" th:value="${idgrupo}">	
+					<input type="hidden" id="fechacon" name="fechacon" th:value="${formattedFecha}">						
+<!--					<input type="hidden" id="hdni" name="dni" th:value="${dni}">	-->								
+					<div class="row mb-5">
+						<div class="col-4">
+						Grupo: <strong><span th:text="${nombreGrupo}"></span></strong></div>
+						<div class="col-4">
+						Fecha: <strong><span th:text="${formattedFecha}"></span></strong></div>
+						<div class="col-4">
+						Hora: <strong><span th:text="${hora}"></span></strong></div>
+					</div>
+					<div class="row">
+					<div class="col-4">
+					<p><label for="numero"  style="margin-left: 15px;">Número entradas: </label>
+					<input type="number" id="numero" name="numeroentradas" min="1" style="width: 80px;" required></p>					
+					</div>	
+					<div class="col-8">
+					<p><label for="dni" class="ms-5">DNI del comprador (8 dígitos+letra): </label>
+					<input type="text" id="dni" name="dni" style="width: 130px; margin-right: 15px;" th:value="${dni}" pattern="[0-9]{8}[A-Z]{1}" required></p>	
+<!--					<label for="dni" class="ms-5">DNI del comprador: <strong><span th:text="${dni}"></span></strong></label>						-->
+					</div>
+					</div>
+					<div class="mt-5" style="text-align: center;">
+						<input type="submit" value="Comprar" class="btn btn-success">
+						<a href="/registrado" class="btn btn-success">Cancelar</a>
+					</div>
+				</form>
+				</div>
+		</div>
+	
+		<div th:if="${alertMessage}" class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+	        <span th:text="${alertMessage}"></span>
+	        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	    </div>
+		
+	</div>	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script>
+		$('#form_venta').submit(function (event) {
+            event.preventDefault(); 
+
+            var id_grupo = $('#grupo').val();
+         //   var fecha = $('#fechacon').val(); //idcon
+            var fechaText = $('#fechacon').val();       
+         
+         	var parts = fechaText.split('/');
+    	 	var fecha = parts[2] + '-' + parts[1] + '-' + parts[0];    
+    
+            var numeroEntradas = $('#numero').val();
+
+            $.ajax({
+                url: '/api/getPlazasDisponibles/' + fecha + '/' + id_grupo,
+                type: 'GET',
+                success: function (plazas) {
+                    if (plazas > 0 && plazas < numeroEntradas) {
+                        alert("Solo hay " + plazas + " plazas disponibles.");
+                         $('#numero').val('');
+                    } else if (plazas == 0) {
+						alert("Para este concierto no hay plazas disponibles.");
+						$('#grupo').val(''); 
+					    $('#fechacon').val(''); 
+					    $('#numero').val(''); 
+					}
+                    else {                       
+                        $('#form_venta').unbind('submit').submit();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });  
+	</script>
+</body>
+</html>

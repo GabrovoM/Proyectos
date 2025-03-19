@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Grupos</h1>
+	</div>
+	<div class="row mb-4">
+		<div class="col-9"></div>
+		<div class="col-3">
+			<p style="text-align: right;">Usuario: <strong><span th:text="${username}" class="me-4"></span></strong><a th:href="@{/logout}">Logout</a></p>
+		</div>
+	</div>		
+		<div class="row">
+			<div class="col-sm-8">
+				<!-- lista de grupos -->	
+				
+				<table class="table table-hover">
+				    <thead class="table-dark bg-info text-white  ">
+				        <tr>
+				            <th scope="col"> Id </th>
+				            <th scope="col"> Nombre </th>
+				            <th scope="col"> Descripción </th>
+				            <th scope="col"> Fecha de creación </th>
+				           	<th scope="col"> Editar </th>
+            				<th scope="col"> Borrar </th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<tr th:if="${listadoGrupos.empty}">
+				            <td colspan="6"> No hay grupos</td>
+				        </tr>
+				        <tr th:each="grupo : ${listadoGrupos}">
+				        
+					        <td>
+					        	<a class="btn btn-success btn-sm" th:href="@{/grupos/{id}(id=${grupo.idgrupo})}">
+					        		<span th:text="${grupo.idgrupo}">Id</span>
+					        	</a>
+					        </td>     
+				         
+				         	<td>
+				            		<span th:text="${grupo.nombre}"></span>
+				            </td>
+				            <td>
+				            		<span th:text="${grupo.descripcion}"></span>
+				            </td>
+				             <td>
+<!--				            	<span th:text="${grupo.fechacreacion}"></span>-->
+				            		<span th:text="${#temporals.format(grupo.fechacreacion, 'dd/MM/yyyy')}"></span>
+				            </td>	
+				          	 <td >
+							        <a class="btn btn-success btn-sm" th:href="@{/grupos/editGrupo/{id}(id=${grupo.idgrupo})}">*</a>
+				
+							</td>
+						     <td>
+    								<button class="btn btn-warning btn-sm text-white pointer" style="cursor:pointer" th:onclick= "'confirmDelete('+${grupo.idgrupo}+')'">x</button>
+						    </td>
+				            
+				        </tr>
+				    </tbody>
+				</table>
+				
+				<div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show">
+			        <p th:text="${errorMessage}"></p>
+			        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			    </div>			    
+				
+				<div class="col-2 float-right">
+			        <div class="p-5">
+						<button type="button" class="btn btn-success float-right" >
+							<a href="/grupos/addGrupo" style="color:white; text-decoration:none">+</a>
+						</button>
+			
+			        </div>       
+			    </div> 
+
+			</div>
+			<div class="col-sm-4">
+				<nav>
+					<ul>
+						<li><a href="/admin">Inicio</a></li>
+						<li><a href="/conciertos">Conciertos</a></li>
+						<li><a href="/grupos">Grupos</a></li>
+						<li><a href="/ventas">Ventas</a></li>
+						<li><a href="/sala">Salas</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+	<script th:inline="javascript">
+	    function confirmDelete(id) {
+			console.log(id);
+	        var confirmResult = confirm("Borrar este grupo?");
+	        if (confirmResult) {
+	            window.location.href = '/grupos/delete/' + id;
+	        }
+	    }
+	</script>
+</body>
+</html>

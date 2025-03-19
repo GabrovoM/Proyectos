@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h3 class="titulo_inicio">Conciertos del grupo <span th:text="${grupo.nombre}"></span>  entre fechas <span th:text="${fini}"></span> y <span th:text="${ffin}"></span></h3>
+	</div>		
+		<div class="row">
+			<div class="col-sm-8">
+				<!-- lista de conciertos -->
+				
+				<table class="table table-hover">
+				    <thead class="table-dark bg-info text-white  ">
+				        <tr>
+				            <th scope="col"> Id </th>
+				            <th scope="col"> Fecha concierto</th>
+				            <th scope="col"> Hora concierto</th>				            
+				            <th scope="col"> Plazas disponibles </th>
+				            <th scope="col" style="text-align:center"> Sala </th>
+				            
+				            <th scope="col" th:if="${rolename != 'ROLE_ADMIN'}"> Precio anticipado </th>
+				            <th scope="col" th:if="${rolename != 'ROLE_ADMIN'}"> Precio taquilla </th>
+				        </tr>
+				    </thead>
+				    <tbody>
+						<tr th:if="${listaFechas.empty}">
+				            <td colspan="6"> No hay conciertos</td>
+				        </tr>
+				        <tr th:each="concierto : ${listaFechas}">				        
+					        <td>
+					        	<span th:text="${concierto.idconcierto}">Id</span>
+
+					        </td>   				         
+				         	<td>
+								 <span th:text="${#temporals.format(concierto.fecha, 'yyyy-MM-dd')}"></span>
+				            </td>
+				            <td>
+								<span th:if="${concierto.hora != null}" th:text="${#temporals.format(concierto.hora.toLocalTime(), 'HH:mm:ss')}"></span>
+								<span th:if="${concierto.hora == null}">--</span>
+				            </td>
+				             <td style="text-align:center">
+				            	<span th:text="${concierto.plazasdisponibles}"></span>
+				            </td>
+				            <td>
+				            	<span th:text="${concierto.sala.nombre}"></span>
+				            </td>
+				            <td th:if="${rolename != 'ROLE_ADMIN'}">
+				            	<span th:text="${concierto.precioanticipado}"></span>
+				            </td>
+				            <td th:if="${rolename != 'ROLE_ADMIN'}">
+				            	<span th:text="${concierto.preciotaquilla}"></span>
+				            </td>  	
+				        </tr>
+				    </tbody>
+				</table>			
+
+				<a th:if="${#strings.equals(rolename, 'ROLE_ADMIN')}" href="/conciertos" class="btn btn-success btn-sm">Volver al listado de conciertos</a>
+				<a th:if="${#strings.equals(rolename, 'ROLE_USER')}" href="/registrado" class="btn btn-success btn-sm">Volver al listado de conciertos</a>
+				<a th:unless="${#strings.equals(rolename, 'ROLE_ADMIN') or #strings.equals(rolename, 'ROLE_USER')}" href="/index" class="btn btn-success btn-sm">Volver al listado de conciertos</a>
+
+			</div>
+			<div class="col-sm-4"  th:if="${rolename == 'ROLE_ADMIN'}">
+				<nav>
+					<ul>
+						<li><a href="/admin">Inicio</a></li>
+						<li><a href="/conciertos">Conciertos</a></li>
+						<li><a href="/grupos">Grupos</a></li>
+						<li><a href="/ventas">Ventas</a></li>
+						<li><a href="/sala">Salas</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

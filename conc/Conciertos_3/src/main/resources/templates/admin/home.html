@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+	<div class="row">
+		<h1 class="titulo_inicio">Panel de administración</h1>
+	</div>
+    <div class="row mb-4">
+		<div class="col-9"></div>
+		<div class="col-3">
+			<p style="text-align: right;">Usuario: <strong><span th:text="${username}" class="me-4"></span></strong><a th:href="@{/index}">Logout</a></p>
+		</div>
+	</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<img src="/img/026_04.jpg" style="width:100%"/>
+			</div>
+			<div class="col-sm-6">
+					<nav>
+					<ul>
+						<li><a href="/admin">Inicio</a></li>
+						<li><a href="/conciertos">Conciertos</a></li>
+						<li><a href="/grupos">Grupos</a></li>
+						<li><a href="/ventas">Ventas</a></li>
+						<li><a href="/sala">Salas</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

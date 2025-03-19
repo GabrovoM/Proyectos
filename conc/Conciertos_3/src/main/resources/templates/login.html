@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Login</title>
+        <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+		<div class="container">
+		<div class="row">
+		<div class="col-2"></div>
+		<div class="col-8">
+		<h4 class="mb-3">Login</h4>
+         <div th:if="${param.error}">
+            Usuario o password inválido.
+        </div>
+        <div th:if="${param.logout}">
+            Has salido del sistema.
+        </div>
+        <form th:action="@{/j_spring_security_check}" method="post">
+            <div><label> Usuario : <input type="text" name="username" class="form-control"/> </label></div>
+            <div><label> Password: <input type="password" name="password" class="form-control"/> </label></div>
+            <div><input type="submit" value="Login" class="btn btn-sm btn-outline-success mt-4"/></div>
+        </form>
+        
+        <p class="mt-5">Si no tienes cuenta puedes registrarte <a th:href="@{/registrarse}" >aquí.</a></p>
+        <p><a href="/">Ir al inicio</a></p>
+         </div>
+         <div class="col-2"></div>
+		</div>
+        </div>
+        
+        <script src="/webjars/jquery/jquery.min.js"></script>
+		<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    </body>
+</html>

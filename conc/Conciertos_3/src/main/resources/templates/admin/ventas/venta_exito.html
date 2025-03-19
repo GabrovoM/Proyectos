@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Proyecto 2</title>
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body  id="page-top">	
+	<div class="container">
+		<div class="row">
+			<h2 class="titulo_inicio">Confirmación de la compra</h2>
+		</div>
+		<div class="row">
+			<div class="col-2"></div>
+				<div class="col-8" th:object="${nventa}">
+					<h3>Su compra se ha realizado con éxito.</h3>
+				    <h4>Detalles de la compra:</h4>	   
+				    	<hr>
+						<p>Grupo: <strong><span th:text="*{concierto.grupo.nombre}"></span></strong></p>
+						<p>Fecha: <strong><span th:text="${formattedFecha}"></span></strong></p>
+						<p>Hora: <strong><span  th:text="*{concierto.hora}"></span></strong></p>
+						<p>Número entradas: <strong><span  th:text="*{numeroentradas}"></span></strong></p>
+						<p>Precio total: <strong><span  th:text="*{total}"></span></strong></p>					
+			    </div>
+		    <div class="col-2"></div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-8"></div>
+			<div class="col-4">
+				<a href="/registrado" class="btn btn-sm btn-success">Volver a la lista de conciertos</a>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
