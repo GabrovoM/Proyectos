@@ -1,38 +1,62 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 
+import com.example.domain.core.entities.AbstractEntity;
 
-/**
- * The persistent class for the film_actor database table.
- * 
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+
 @Entity
 @Table(name="film_actor")
 @NamedQuery(name="FilmActor.findAll", query="SELECT f FROM FilmActor f")
-public class FilmActor implements Serializable {
+public class FilmActor  extends AbstractEntity<Actor> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
 	private FilmActorPK id;
 
 	@Column(name="last_update", nullable=false)
+	@NotNull(message = "La fecha de la última actualización no puede ser nula.")
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
-	//bi-directional many-to-one association to Actor
 	@ManyToOne
 	@JoinColumn(name="actor_id", nullable=false, insertable=false, updatable=false)
+	@NotNull
 	private Actor actor;
 
-	//bi-directional many-to-one association to Film
 	@ManyToOne
 	@JoinColumn(name="film_id", nullable=false, insertable=false, updatable=false)
+	@NotNull
 	private Film film;
 
 	public FilmActor() {
+	}	
+
+	public FilmActor(@NotNull Actor actor, @NotNull Film film) {
+		super();		
+		this.actor = actor;
+		this.film = film;			
+		this.id = new FilmActorPK(actor.getActorId(), film.getFilmId());
+		this.lastUpdate = Timestamp.from(Instant.now());
 	}
+	
+//	public FilmActor(@NotNull Actor actor, @NotNull Film film, Timestamp lastUpdate) {
+//		super();		
+//		this.actor = actor;
+//		this.film = film;
+//		this.lastUpdate = Timestamp.from(Instant.now());
+//	}
 
 	public FilmActorPK getId() {
 		return this.id;

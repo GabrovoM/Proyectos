@@ -1,35 +1,48 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
-/**
- * The primary key class for the film_category database table.
- * 
- */
+import com.example.domain.core.entities.AbstractEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+
 @Embeddable
-public class FilmCategoryPK implements Serializable {
+public class FilmCategoryPK  extends AbstractEntity<Actor> implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="film_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@NotNull
+	@Positive
 	private int filmId;
 
 	@Column(name="category_id", insertable=false, updatable=false, unique=true, nullable=false)
-	private byte categoryId;
+	@NotNull
+	@Positive
+	private int categoryId;
 
 	public FilmCategoryPK() {
 	}
+	
+	public FilmCategoryPK(int filmId, int categoryId) {
+        this.filmId = filmId;
+        this.categoryId = categoryId;
+    }
+	
 	public int getFilmId() {
 		return this.filmId;
 	}
 	public void setFilmId(int filmId) {
 		this.filmId = filmId;
 	}
-	public byte getCategoryId() {
+	public int getCategoryId() {
 		return this.categoryId;
 	}
-	public void setCategoryId(byte categoryId) {
+	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
 

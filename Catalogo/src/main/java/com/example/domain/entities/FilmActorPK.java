@@ -1,25 +1,42 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import com.example.domain.core.entities.AbstractEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 /**
  * The primary key class for the film_actor database table.
  * 
  */
 @Embeddable
-public class FilmActorPK implements Serializable {
+public class FilmActorPK  extends AbstractEntity<Actor> implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="actor_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@NotNull
+	@Positive
 	private int actorId;
 
 	@Column(name="film_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@NotNull
+	@Positive
 	private int filmId;
 
 	public FilmActorPK() {
 	}
+	
+	 public FilmActorPK(int actorId, int filmId) {
+	        this.actorId = actorId;
+	        this.filmId = filmId;
+	    }
+	 
+	 
 	public int getActorId() {
 		return this.actorId;
 	}

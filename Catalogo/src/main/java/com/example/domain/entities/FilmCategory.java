@@ -1,37 +1,55 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.sql.Timestamp;
 
+import com.example.domain.core.entities.AbstractEntity;
 
-/**
- * The persistent class for the film_category database table.
- * 
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+
 @Entity
 @Table(name="film_category")
 @NamedQuery(name="FilmCategory.findAll", query="SELECT f FROM FilmCategory f")
-public class FilmCategory implements Serializable {
+public class FilmCategory  extends AbstractEntity<Actor> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
+	@NotNull
 	private FilmCategoryPK id;
 
 	@Column(name="last_update", nullable=false)
+	@NotNull(message = "La fecha de la última actualización no puede ser nula.")
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
-	//bi-directional many-to-one association to Category
 	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false, insertable=false, updatable=false)
+	@NotNull
 	private Category category;
 
-	//bi-directional many-to-one association to Film
 	@ManyToOne
 	@JoinColumn(name="film_id", nullable=false, insertable=false, updatable=false)
+	@NotNull
 	private Film film;
 
 	public FilmCategory() {
+	}
+
+	public FilmCategory(@NotNull Category category, @NotNull Film film) {
+		super();
+		this.category = category;
+		this.film = film;
+		
+		
+		this.id = new FilmCategoryPK(film.getFilmId(), category.getCategoryId()); 
 	}
 
 	public FilmCategoryPK getId() {
