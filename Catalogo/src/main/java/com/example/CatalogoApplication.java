@@ -21,14 +21,12 @@ public class CatalogoApplication implements CommandLineRunner{
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatalogoApplication.class, args);
-	}
-	
+	}	
 	
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {		
 		System.err.println("Applicación arrancada");
-
 	}
 
 }
