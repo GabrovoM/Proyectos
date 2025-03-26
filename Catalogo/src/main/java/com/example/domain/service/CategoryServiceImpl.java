@@ -1,15 +1,20 @@
 package com.example.domain.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.domain.contracts.repository.CategoryRepository;
 import com.example.domain.contracts.service.CategoryService;
 import com.example.domain.entities.Actor;
 import com.example.domain.entities.Category;
+import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.ItemNotFoundException;
 
@@ -33,12 +38,16 @@ public class CategoryServiceImpl implements CategoryService {
 		if (item == null) {
 			throw new InvalidDataException("La categoría no puede ser nula.");
 		}
-		if (item.getCategoryId()>0 && dao.existsById(item.getCategoryId())) {
-			throw new DuplicateKeyException("Ya existe.");
+//		if (item.getCategoryId()>0 && dao.existsById(item.getCategoryId())) {
+//			throw new DuplicateKeyException("Ya existe.");
+//		}
+		if (dao.findById(item.getCategoryId()).isPresent()) {
+			throw new DuplicateKeyException("Ya existe categoría con este id.");
 		}
 		return dao.save(item);
 	}
-	@Override
+	@Override   
+//	@Transactional(readOnly = true)
 	public Category modify(Category item) throws ItemNotFoundException, InvalidDataException {
 		if (item == null) {
 			throw new InvalidDataException("La categoría no puede ser nula.");
@@ -50,9 +59,10 @@ public class CategoryServiceImpl implements CategoryService {
 			c.setName(item.getName());
 			return dao.save(c);
 		} else {
-			throw new ItemNotFoundException("No existe categoría con este ID.");
+			throw new ItemNotFoundException("No existe categoría con este ID."+item.getCategoryId());
 		}	
-	}
+	}	
+	
 	@Override
 	public void delete(Category item) throws InvalidDataException {
 		if (item == null) {
@@ -64,10 +74,33 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void deleteById(Integer id) throws ItemNotFoundException {
 		if (!dao.findById(id).isPresent()) {
-			throw new ItemNotFoundException("No existe categoría con ID: "+id);
+			throw new ItemNotFoundException("No existe categoría con ID:"+id);
 		}
-		dao.deleteById(id);
-		
+		dao.deleteById(id);		
+	}
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {		
+		return dao.findAllBy(type);
+	}
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {		
+		return dao.findAllBy(sort, type);
+	}
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {	
+		return dao.findAllBy(pageable, type);
+	}
+	@Override
+	public Iterable<Category> getAll(Sort sort) {		
+		return dao.findAll(sort);
+	}
+	@Override
+	public Page<Category> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
+	@Override
+	public List<Category> novedades(Date fecha) {
+		return dao.findByLastUpdateGreaterThanEqualOrderByLastUpdate(fecha);
 	}
 
 }

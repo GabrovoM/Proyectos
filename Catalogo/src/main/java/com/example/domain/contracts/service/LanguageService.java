@@ -4,9 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.domain.core.contracts.service.ProjectionDomainService;
-import com.example.domain.entities.Category;
+import com.example.domain.entities.Language;
 
-
-public interface CategoryService extends ProjectionDomainService<Category, Integer> {
-	List<Category> novedades(Date fecha);
+public interface LanguageService extends ProjectionDomainService<Language, Integer> {
+	List<Language> novedades(Date fecha);
 }

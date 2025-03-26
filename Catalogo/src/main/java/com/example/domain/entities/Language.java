@@ -1,20 +1,31 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.domain.core.entities.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/**
- * The persistent class for the language database table.
- * 
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name="language")
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
-public class Language implements Serializable {
+public class Language  extends AbstractEntity<Actor> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,15 +34,24 @@ public class Language implements Serializable {
 	private int languageId;
 
 	@Column(nullable=false, length=20)
+	@NotBlank
+	@Size(min = 2, max = 15)
+	@Pattern(regexp = "^[A-Z][a-z]+$", message = "El nombre debe comenzar con mayúscula seguida de letras minúsculas.")
 	private String name;
+	
+	@Column(name="last_update", insertable = false, updatable = false)	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+	private Date lastUpdate;	
 
-	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="languageVO")
+	@Valid
+	@JsonIgnore
 	private List<Film> filmsVO;
 
-	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="language2")
-	private List<Film> films2;
+	@Valid
+	@JsonIgnore
+	private List<Film> films2;	
 
 	public Language() {
 	}
@@ -41,6 +61,13 @@ public class Language implements Serializable {
 		this.languageId = languageId;
 		this.films2 = new ArrayList<>();
 		this.filmsVO = new ArrayList<>();
+	}
+	
+	public Language(int languageId,
+			@NotBlank @Size(min = 2, max = 15) @Pattern(regexp = "^[A-Z][a-z]+$", message = "El nombre debe comenzar con mayúscula seguida de letras minúsculas.") String name) {
+		super();
+		this.languageId = languageId;
+		this.name = name;
 	}
 
 	public int getLanguageId() {

@@ -1,12 +1,23 @@
 package com.example;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
+
+import com.example.domain.contracts.repository.ActorRepository;
 import com.example.domain.entities.Actor;
 import com.example.domain.service.ActorServiceImpl;
-import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.ItemNotFoundException;
 
@@ -32,7 +43,6 @@ class CatalogoApplicationTests {
 //		assertNull(afterDelete);	
 //		
 //	}
-	
 	
 
 }

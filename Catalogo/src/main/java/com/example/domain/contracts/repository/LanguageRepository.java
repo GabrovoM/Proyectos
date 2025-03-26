@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.example.domain.core.contracts.repositories.RepositoryWithProjections;
 import com.example.domain.entities.Actor;
-import com.example.domain.entities.Category;
+import com.example.domain.entities.Language;
 
-public interface CategoryRepository extends JpaRepository<Category, Integer>, JpaSpecificationExecutor<Actor>, RepositoryWithProjections {
-	List<Category> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Date fecha);
+public interface LanguageRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Actor>, RepositoryWithProjections {
+	List<Language> findByLastUpdateGreaterThanEqualOrderByLastUpdate(Date fecha);
 }

@@ -1,21 +1,32 @@
 package com.example.domain.entities;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.domain.core.entities.AbstractEntity;
 
-/**
- * The persistent class for the category database table.
- * 
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
-public class Category implements Serializable {
+public class Category  extends AbstractEntity<Actor> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,14 +34,18 @@ public class Category implements Serializable {
 	@Column(name="category_id", unique=true, nullable=false)
 	private int categoryId;
 
-	@Column(name="last_update", nullable=false)
+	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent 
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
+	@NotBlank
+	@Size(max = 25, min = 3)
+	@Pattern(regexp = "^[A-Z]*$", message = "El nombre debe estar en mayúsculas")
 	private String name;
 
-	//bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy="category")
+	@Valid
 	private List<FilmCategory> filmCategories;
 
 	public Category() {
@@ -48,11 +63,20 @@ public class Category implements Serializable {
 		this.name = name;
 		this.filmCategories = new ArrayList<>();
 	}
+	
+	public Category(int categoryId,
+			@NotNull(message = "La fecha de la última actualización no puede ser nula.") @PastOrPresent Timestamp lastUpdate,
+			@NotBlank @Size(max = 25, min = 3) @Pattern(regexp = "^[A-Z]*$", message = "El nombre debe estar en mayúsculas") String name) {
+		super();
+		this.categoryId = categoryId;
+		this.lastUpdate = lastUpdate;
+		this.name = name;
+	}
 
 	public int getCategoryId() {
 		return this.categoryId;
 	}
-
+	
 	public void setCategoryId(int categoryId) {
 		this.categoryId = categoryId;
 	}
